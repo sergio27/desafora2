@@ -1,26 +1,29 @@
 import rss_reader
 import json
 
-from flask import Flask, render_template
+from flask import Flask, redirect, request
 
 app = Flask("__main__")
 
 
-@app.get("/")
+@app.route("/")
 def inicio():
-    episodios = rss_reader.desafora2_rss()
-
-    return render_template("index.html", episodios=episodios[:20])
+    return redirect("https://desafora2.libsyn.com")
 
 
-@app.get("/api/episodios")
+@app.route("/api/episodios")
 def episodios():
     episodios = rss_reader.desafora2_rss()
-    result = {
-        "episodios": episodios
-    }
 
-    return json.dumps(result)
+    if "desde" in request.args and "hasta" in request.args:
+        desde = int(request.args["desde"])
+        hasta = int(request.args["hasta"])
+
+        result = episodios[desde:hasta]
+
+        return json.dumps({ "episodios": result })
+
+    return json.dumps({ "episodios": episodios })
 
 
 if __name__ == "__main__":
