@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Catalog</title>
+    <link rel="stylesheet" href="/static/fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <!-- https://fonts.google.com/ -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/templatemo-video-catalog.css">
+<!--
+
+TemplateMo 552 Video Catalog
+
+https://templatemo.com/tm-552-video-catalog
+
+-->
+</head>
+
+<body>
+
+        <div class="container-fluid">
+            <div id="content" class="mx-auto tm-content-container">
+                <main>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-page-title mb-4">Our Video Catalog</h2>
+                        </div>
+                    </div>
+
+                    {% for episodio in episodios: %}
+                    <div class="row tm-catalog-item-list">
+                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
+                            <div class="position-relative tm-thumbnail-container">
+                                <img src= {{ episodio.image }} alt="Image" class="img-fluid tm-catalog-item-img">
+                                <a href=  {{ episodio.url }} class="position-absolute tm-img-overlay">
+                                    <i class="fas fa-play tm-overlay-icon"></i>
+                                </a>
+                            </div>    
+                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
+                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">{{ episodio.title }}</h3>
+                                <p class="tm-catalog-item-text">{{ episodio.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </main>
+
+                <footer class="row pt-5">
+                    <div class="col-12">
+                        <p class="text-right">Copyright 2020 The Video Catalog Company 
+                        
+                        - Designed by <a href="https://templatemo.com" rel="nofollow" target="_parent">TemplateMo</a></p>
+                    </div>
+                </footer>
+            </div> <!-- tm-content-container -->
+    </div> <!-- .tm-page-wrap -->
+
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        function setVideoSize() {
+            const vidWidth = 1920;
+            const vidHeight = 1080;
+            let windowWidth = window.innerWidth;
+            let newVidWidth = windowWidth;
+            let newVidHeight = windowWidth * vidHeight / vidWidth;
+            let marginLeft = 0;
+            let marginTop = 0;
+
+            if (newVidHeight < 500) {
+                newVidHeight = 500;
+                newVidWidth = newVidHeight * vidWidth / vidHeight;
+            }
+
+            if(newVidWidth > windowWidth) {
+                marginLeft = -((newVidWidth - windowWidth) / 2);
+            }
+
+            if(newVidHeight > 720) {
+                marginTop = -((newVidHeight - $('#tm-video-container').height()) / 2);
+            }
+
+            const tmVideo = $('#tm-video');
+
+            tmVideo.css('width', newVidWidth);
+            tmVideo.css('height', newVidHeight);
+            tmVideo.css('margin-left', marginLeft);
+            tmVideo.css('margin-top', marginTop);
+        }
+
+        $(document).ready(function () {
+            /************** Video background *********/
+
+            setVideoSize();
+
+            // Set video background size based on window size
+            let timeout;
+            window.onresize = function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(setVideoSize, 100);
+            };
+
+            // Play/Pause button for video background      
+            const btn = $("#tm-video-control-button");
+
+            btn.on("click", function (e) {
+                const video = document.getElementById("tm-video");
+                $(this).removeClass();
+
+                if (video.paused) {
+                    video.play();
+                    $(this).addClass("fas fa-pause");
+                } else {
+                    video.pause();
+                    $(this).addClass("fas fa-play");
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>
